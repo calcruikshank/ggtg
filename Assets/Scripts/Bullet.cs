@@ -40,7 +40,7 @@ public class Bullet : MonoBehaviour
         Vector3 endPosition = target + transform.forward * projectileRange;
         isHoming = false;
         ShootAt(endPosition);
-        velocity = 10;
+        velocity = 20;
         attackDamage = 10;
         projectileSize = 1;
         this.isCrit = isCrit;

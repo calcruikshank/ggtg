@@ -105,13 +105,13 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
-    float mouseSensitivity = 500;
+    float mouseSensitivity = 5;
     float mouseX;
     float mouseY;
     private void HandleInput()
     {
-        mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
-        mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+        mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
+        mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
         
         if (Input.GetMouseButtonDown(0))
         {
@@ -202,7 +202,7 @@ public class PlayerController : NetworkBehaviour
     {
         yRotation += mouseX;
         xRotation -= mouseY;
-        xRotation = Mathf.Clamp(xRotation, -90, 90);
+        xRotation = Mathf.Clamp(xRotation, -89, 89);
         pelvis.localRotation = Quaternion.Euler(xRotation, yRotation, 0);
     }
 
