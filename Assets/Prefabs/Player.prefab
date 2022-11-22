@@ -124,7 +124,7 @@ MonoBehaviour:
   pelvis: {fileID: 6268391109133657156}
   pelvisLegs: {fileID: 7167246134515027474}
   rootRoot: {fileID: 6869300631274395823}
-  dieBody: {fileID: 0}
+  dieBody: {fileID: 1970027438439640900}
   capeAnim: {fileID: 0}
   faceRotations: []
   faceColors: []
@@ -991,6 +991,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 1b1f3dc835c5a3e4487e6a8460e90994, type: 2}
+    - target: {fileID: -6264912446601392634, guid: 57ef43d4d8ab48945a15b09e3161f15f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 407461273246241356, guid: 57ef43d4d8ab48945a15b09e3161f15f, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -1016,6 +1020,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7036213049465896255, guid: 57ef43d4d8ab48945a15b09e3161f15f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8094877327757732638, guid: 57ef43d4d8ab48945a15b09e3161f15f, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}

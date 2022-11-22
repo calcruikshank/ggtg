@@ -27,7 +27,6 @@ public class Gun : MonoBehaviour
 
     public void Fire()
     {
-        Debug.Log("fire gun");
         //Debug.Log(playerOwningGun.armsAnim.GetCurrentAnimatorStateInfo(0).normalizedTime);
 
         hasFiredForAnim = true;

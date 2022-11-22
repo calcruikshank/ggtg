@@ -286,9 +286,41 @@ public class PlayerController : NetworkBehaviour
 
     public void TakeDamage(float damageSent)
     {
+        if (!IsOwner)
+        {
+            TakeDamageServerRpc(damageSent);
+        }
     }
+
+    float currentHealth = 100;
+    [ServerRpc (RequireOwnership = false)] 
+    void TakeDamageServerRpc(float damageSent)
+    {
+        TakeDamageClientRpc(damageSent);
+        VisualQueueForDamage();
+    }
+
+    private void VisualQueueForDamage()
+    {
+    }
+
+    [ClientRpc]
+    void TakeDamageClientRpc(float damageSent)
+    {
+        TakeDamageLocal(damageSent);
+    }
+    void TakeDamageLocal(float damageSent)
+    {
+        currentHealth -= damageSent;
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
     public void Die()
     {
+        SpawnPlayerBody();
     }
     void SpawnPlayerBody()
     {
