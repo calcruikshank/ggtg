@@ -9,7 +9,6 @@ public class PlayerController : NetworkBehaviour
 {
     Rigidbody rb;
     Vector3 lastLookedPosition;
-    public Vector2 lookDirection;
     float  horizontalMovement;
     float  verticalMovement;
     Vector2 inputFace;
@@ -84,6 +83,7 @@ public class PlayerController : NetworkBehaviour
                 HandleFireInput();
                 HandleDispelInput();
                 HandleRollInput();
+                HandleJumpInput();
                 break;
             case State.Firing:
                 FaceLookDirection();
@@ -91,21 +91,47 @@ public class PlayerController : NetworkBehaviour
                 HandleDispelInput();
                 HandleRollInput();
                 FireAnimation(anim.GetCurrentAnimatorStateInfo(1));
+                HandleJumpInput();
                 break;
             case State.Dispelling:
                 HandleDispelAnimation(anim.GetCurrentAnimatorStateInfo(1));
                 FaceLookDirection();
                 HandleMovement();
                 HandleRollInput();
+                HandleJumpInput();
                 break;
             case State.Rolling:
                 FaceLookDirection();
                 HandleRollAnimation(anim.GetCurrentAnimatorStateInfo(0));
+                HandleJumpInput();
                 break;
         }
     }
 
-    float mouseSensitivity = 5;
+    public Transform groundCheck;
+    public float groundDistance = 0.2f;
+    public LayerMask whatIsGround;
+    public bool IsGrounded()
+    {
+        return Physics.CheckSphere(groundCheck.position, groundDistance, whatIsGround);
+    }
+    private void HandleJumpInput()
+    {
+        if (spacePressed && IsGrounded())
+        {
+            spacePressed = false;
+            Jump();
+        }
+    }
+
+    void Jump()
+    {
+        rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+        rb.AddForce(transform.up * jumpHeight, ForceMode.Impulse);
+    }
+
+    float jumpHeight = 800;
+    float mouseSensitivity = 2;
     float mouseX;
     float mouseY;
     private void HandleInput()
@@ -129,9 +155,27 @@ public class PlayerController : NetworkBehaviour
         {
             OnRollUp();
         }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            SpaceDown();
+        }
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            SpaceUp();
+        }
 
         horizontalMovement = Input.GetAxisRaw("Horizontal");
         verticalMovement = Input.GetAxisRaw("Vertical");
+    }
+    bool spacePressed;
+    private void SpaceDown()
+    {
+        spacePressed = true;
+    }
+
+    private void SpaceUp()
+    {
+        spacePressed = false;
     }
 
     void FixedUpdate()
@@ -165,11 +209,12 @@ public class PlayerController : NetworkBehaviour
             currentSpeed = 0f;
         }*/
     }
+    Vector3 moveDirection;
     private void FixedHandleMovement()
     {
-        Vector3 moveDirection = pelvis.forward * verticalMovement + pelvis.right * horizontalMovement;
+        moveDirection = pelvis.forward * verticalMovement + pelvis.right * horizontalMovement;
         //rb.AddForce(movement.normalized * moveSpeed);
-        rb.velocity = moveDirection * currentSpeed;
+        rb.velocity = new Vector3( moveDirection.x * currentSpeed, rb.velocity.y, moveDirection.z * currentSpeed);
         if (moveDirection.normalized != Vector3.zero)
         {
             pelvisLegs.transform.forward = Vector3.Lerp(pelvisLegs.transform.forward, moveDirection, 20f * Time.deltaTime);
@@ -451,9 +496,7 @@ public class PlayerController : NetworkBehaviour
         {
             Destroy(newDispelObject);
         }
-        //rootRoot.forward = lastLookedPosition;
-        //pelvis.forward = lastLookedPosition;
-        //pelvisLegs.forward = lastLookedPosition;
+
         // Debug.Log(currentDispelPercentage);
         currentSpeed = 10f;
         //wand.GetComponent<Collider>().enabled = false;
