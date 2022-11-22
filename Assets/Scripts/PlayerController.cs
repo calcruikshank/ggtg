@@ -109,7 +109,7 @@ public class PlayerController : NetworkBehaviour
     }
 
     public Transform groundCheck;
-    public float groundDistance = 0.2f;
+    public float groundDistance = 0.4f;
     public LayerMask whatIsGround;
     public bool IsGrounded()
     {
